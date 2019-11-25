@@ -163,7 +163,7 @@ const TSRules = {
 
 module.exports = {
   env: {
-    browser: true,
+    node: true,
     es6: true
   },
   parser: '@typescript-eslint/parser',
@@ -182,25 +182,5 @@ module.exports = {
     'prettier/@typescript-eslint',
     'prettier'
   ],
-  rules: Object.assign(rules, TSRules),
-  overrides: [
-    {
-      files: ['tests/**/*.ts'],
-      env: {
-        node: true
-      },
-      globals: {
-        jest: 'readonly',
-        document: 'readonly',
-        window: 'readonly',
-        Promise: 'readonly',
-        expect: 'readonly',
-        it: 'readonly',
-        describe: 'readonly',
-        beforeAll: 'readonly',
-        beforeEach: 'readonly',
-        afterEach: 'readonly'
-      }
-    }
-  ]
+  rules: Object.assign(rules, TSRules)
 };
