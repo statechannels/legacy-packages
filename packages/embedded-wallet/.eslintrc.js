@@ -2,6 +2,7 @@ const rules = {
   'arrow-body-style': 'error',
   'arrow-parens': ['off', 'as-needed'],
   camelcase: 'error',
+  'capitalized-comments': ['error', 'always', {ignoreConsecutiveComments: true}],
   complexity: 'off',
   'constructor-super': 'error',
   curly: 'error',
@@ -184,17 +185,16 @@ module.exports = {
   rules: Object.assign(rules, TSRules),
   overrides: [
     {
-      files: ['tests/**/*.ts'],
+      files: ['**/*.test.{ts,tsx}'],
       env: {
         node: true
       },
       globals: {
         jest: 'readonly',
-        document: 'readonly',
-        window: 'readonly',
         Promise: 'readonly',
         expect: 'readonly',
         it: 'readonly',
+        fail: 'readonly',
         describe: 'readonly',
         beforeAll: 'readonly',
         beforeEach: 'readonly',
