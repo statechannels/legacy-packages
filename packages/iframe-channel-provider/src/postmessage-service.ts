@@ -1,9 +1,9 @@
 import {ErrorResponse} from '@statechannels/client-api-schema';
 
-import {JsonRpcRequest, isJsonRpcResponse, isJsonRpcErrorResponse} from './types';
 import {logger} from './logger';
+import {JsonRpcRequest, isJsonRpcResponse, isJsonRpcErrorResponse} from './types/jsonrpc';
 
-export interface MessagingServiceOptions {
+export interface PostMessageServiceOptions {
   timeoutMs?: number;
   maxRetries?: number;
 }
@@ -14,7 +14,7 @@ class RpcError extends Error {
   }
 }
 
-export class MessagingService {
+export class PostMessageService {
   protected timeoutListener?: NodeJS.Timeout;
   protected attempts = 0;
   protected url = '';
@@ -22,7 +22,7 @@ export class MessagingService {
   protected readonly timeoutMs: number;
   protected readonly maxRetries: number;
 
-  constructor({timeoutMs, maxRetries}: MessagingServiceOptions = {}) {
+  constructor({timeoutMs, maxRetries}: PostMessageServiceOptions = {}) {
     this.timeoutMs = timeoutMs || -1;
     this.maxRetries = maxRetries || 0;
   }

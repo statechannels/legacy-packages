@@ -2,24 +2,19 @@ import EventEmitter from 'eventemitter3';
 import {Guid} from 'guid-typescript';
 import {NotificationType, Notification} from '@statechannels/client-api-schema';
 
-import {MessagingService} from './messaging-service';
-import {
-  ChannelProviderInterface,
-  isJsonRpcNotification,
-  Method,
-  EventType,
-  MethodType,
-  OnType,
-  OffType
-} from './types';
-import {UIService} from './ui-service';
+import {IFrameChannelProviderInterface} from './types';
+import {WalletJsonRpcAPI} from './types/wallet-api';
 import {logger} from './logger';
+import {PostMessageService} from './postmessage-service';
+import {IFrameService} from './iframe-service';
+import {isJsonRpcNotification} from './types/jsonrpc';
+import {OnType, OffType, EventType, SubscribeType, UnsubscribeType} from './types/events';
 
-class ChannelProvider implements ChannelProviderInterface {
+class IFrameChannelProvider implements IFrameChannelProviderInterface {
   protected mounted = false;
   protected readonly events: EventEmitter<EventType>;
-  protected readonly ui: UIService;
-  protected readonly messaging: MessagingService;
+  protected readonly iframe: IFrameService;
+  protected readonly messaging: PostMessageService;
   protected readonly subscriptions: {
     [T in keyof NotificationType]: string[];
   } = {
@@ -38,8 +33,8 @@ class ChannelProvider implements ChannelProviderInterface {
 
   constructor() {
     this.events = new EventEmitter<EventType>();
-    this.ui = new UIService();
-    this.messaging = new MessagingService();
+    this.iframe = new IFrameService();
+    this.messaging = new PostMessageService();
   }
 
   walletReady = new Promise(resolve => {
@@ -60,9 +55,9 @@ class ChannelProvider implements ChannelProviderInterface {
     if (url) {
       this.url = url;
     }
-    this.ui.setUrl(this.url);
+    this.iframe.setUrl(this.url);
     this.messaging.setUrl(this.url);
-    await this.ui.mount();
+    await this.iframe.mount();
     logger.info('Application successfully mounted Wallet iFrame inside DOM.');
     logger.info('Waiting for wallet ping...');
     await this.walletReady;
@@ -86,11 +81,11 @@ class ChannelProvider implements ChannelProviderInterface {
     this.walletVersion = walletVersion;
   }
 
-  async send<M extends Method = Method>(
+  async send<M extends keyof WalletJsonRpcAPI>(
     method: M,
-    params: MethodType[M]['request']['params']
-  ): Promise<MethodType[M]['response']['result']> {
-    const target = await this.ui.getTarget();
+    params: WalletJsonRpcAPI[M]['request']['params']
+  ): Promise<WalletJsonRpcAPI[M]['response']['result']> {
+    const target = await this.iframe.getTarget();
     const response = await this.messaging.request(target, {
       jsonrpc: '2.0',
       method: method,
@@ -100,13 +95,13 @@ class ChannelProvider implements ChannelProviderInterface {
     return response;
   }
 
-  async subscribe(subscriptionType: Notification['method']): Promise<string> {
+  subscribe: SubscribeType = async subscriptionType => {
     const subscriptionId = Guid.create().toString();
     this.subscriptions[subscriptionType].push(subscriptionId);
     return subscriptionId;
-  }
+  };
 
-  async unsubscribe(subscriptionId: string): Promise<boolean> {
+  unsubscribe: UnsubscribeType = async subscriptionId => {
     Object.keys(this.subscriptions).forEach(method => {
       this.subscriptions[method as Notification['method']] = this.subscriptions[
         method as Notification['method']
@@ -114,7 +109,7 @@ class ChannelProvider implements ChannelProviderInterface {
     });
 
     return true;
-  }
+  };
 
   on: OnType = (method, params) => this.events.on(method, params);
 
@@ -132,7 +127,7 @@ class ChannelProvider implements ChannelProviderInterface {
       const notificationParams = message.params;
       this.events.emit(notificationMethod, notificationParams);
       if (notificationMethod === 'UIUpdate') {
-        this.ui.setVisibility(message.params.showWallet);
+        this.iframe.setVisibility(message.params.showWallet);
       } else {
         this.subscriptions[notificationMethod].forEach(id => {
           this.events.emit(id, notificationParams);
@@ -142,6 +137,6 @@ class ChannelProvider implements ChannelProviderInterface {
   }
 }
 
-const channelProvider = new ChannelProvider();
+const channelProvider = new IFrameChannelProvider();
 
 export {channelProvider};

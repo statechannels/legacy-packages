@@ -1,13 +1,13 @@
-import {MessagingService} from '../src/messaging-service';
-import {JsonRpcRequest, JsonRpcResponse} from '../src/types';
-import {UIService} from '../src/ui-service';
+import {PostMessageService} from '../src/postmessage-service';
+import {JsonRpcRequest, JsonRpcResponse} from '../src/types/jsonrpc';
+import {IFrameService} from '../src/iframe-service';
 import {logger} from '../src/logger';
 
 type MessageResponse = {isFooBar: boolean};
 
-describe('MessagingService', () => {
-  let messagingService: MessagingService;
-  let uiService: UIService;
+describe('PostMessageService', () => {
+  let postMessageService: PostMessageService;
+  let uiService: IFrameService;
   let target: Window;
 
   const request = {
@@ -24,10 +24,10 @@ describe('MessagingService', () => {
   } as JsonRpcResponse;
 
   beforeEach(async () => {
-    messagingService = new MessagingService({timeoutMs: 1000, maxRetries: 5});
-    messagingService.setUrl('*');
+    postMessageService = new PostMessageService({timeoutMs: 1000, maxRetries: 5});
+    postMessageService.setUrl('*');
 
-    uiService = new UIService();
+    uiService = new IFrameService();
 
     await uiService.mount();
     target = await uiService.getTarget();
@@ -41,7 +41,7 @@ describe('MessagingService', () => {
         done();
       });
 
-      messagingService.send(target, request, '*');
+      postMessageService.send(target, request, '*');
     });
   });
 
@@ -50,10 +50,10 @@ describe('MessagingService', () => {
       const originalMessageHandler = target.onmessage;
       target.onmessage = () => ({});
 
-      const sendSpy = jest.spyOn(messagingService, 'send');
+      const sendSpy = jest.spyOn(postMessageService, 'send');
 
       jest.useFakeTimers();
-      messagingService.send(target, request, '*');
+      postMessageService.send(target, request, '*');
       jest.advanceTimersByTime(3000);
 
       expect(sendSpy).toHaveBeenCalledTimes(4);
@@ -72,11 +72,11 @@ describe('MessagingService', () => {
   it('should timeout sending a message when the wallet is unreachable', () => {
     target.onmessage = () => ({});
 
-    const sendSpy = jest.spyOn(messagingService, 'send');
+    const sendSpy = jest.spyOn(postMessageService, 'send');
     const warnSpy = jest.spyOn(logger, 'warn');
 
     jest.useFakeTimers();
-    messagingService.send(target, request, '*');
+    postMessageService.send(target, request, '*');
     jest.advanceTimersByTime(5000);
 
     expect(sendSpy).toHaveBeenCalledTimes(5);
@@ -93,20 +93,20 @@ describe('MessagingService', () => {
       target.parent.postMessage(response, '*');
     };
 
-    const result = await messagingService.request<MessageResponse>(target, request);
+    const result = await postMessageService.request<MessageResponse>(target, request);
     expect(result.isFooBar).toEqual(true);
   });
 
   it('can clear pending retries when calling acknowledge()', () => {
     target.onmessage = () => ({});
 
-    const sendSpy = jest.spyOn(messagingService, 'send');
+    const sendSpy = jest.spyOn(postMessageService, 'send');
 
     jest.useFakeTimers();
-    messagingService.send(target, request, '*');
+    postMessageService.send(target, request, '*');
     jest.advanceTimersByTime(2000);
 
-    messagingService.acknowledge();
+    postMessageService.acknowledge();
     jest.useRealTimers();
 
     expect(sendSpy).toHaveBeenCalledTimes(3);
