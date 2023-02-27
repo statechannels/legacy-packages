@@ -181,7 +181,7 @@ export function generatePlayerUpdate(
     jsonrpc: '2.0',
     params: {
       channelId,
-      appData: '0x0',
+      appData: '0x00',
       allocations: [
         {
           token: hexZeroPad('0x0', 32),
@@ -231,7 +231,7 @@ export function generateCreateChannelRequest(
         }
       ],
       appDefinition: '0x430869383d611bBB1ce7Ca207024E7901bC26b40',
-      appData: '0x0',
+      appData: '0x00',
       fundingStrategy: 'Direct'
     }
   };
@@ -264,7 +264,7 @@ export function generateCloseAndWithdrawRequest(
     id: 88888888,
     method: 'CloseAndWithdraw',
     params: {
-      hubParticipantId: hub.participantId
-    }
+      playerParticipantId: player.participantId,
+      hub: hub,}
   };
 }
