@@ -347,7 +347,7 @@ export class ChainWatcher implements Chain {
 
     const response = await this.signer.sendTransaction({
       ...convertNitroTransactionRequest(transactionRequest),
-      gasPrice: GAS_PRICE
+      maxPriorityFeePerGas: GAS_PRICE
     });
     return response.hash;
   }
@@ -369,7 +369,7 @@ export class ChainWatcher implements Chain {
     };
     const response = await this.signer.sendTransaction({
       ...convertNitroTransactionRequest(transactionRequest),
-      gasPrice: GAS_PRICE
+      maxPriorityFeePerGas: GAS_PRICE
     });
     const tx = await response.wait();
     return tx.transactionHash;
@@ -497,10 +497,7 @@ export class ChainWatcher implements Chain {
 function convertNitroTransactionRequest(nitroTransactionRequest): TransactionRequest {
   return {
     ...nitroTransactionRequest,
-    gasLimit: nitroTransactionRequest.gasLimit
-      ? BN.from(nitroTransactionRequest.gasLimit)
-      : undefined,
-    gasPrice: nitroTransactionRequest.gasPrice
+    maxPriorityFeePerGas: nitroTransactionRequest.gasPrice
       ? BN.from(nitroTransactionRequest.gasPrice)
       : undefined,
     nonce: nitroTransactionRequest.nonce ? BN.from(nitroTransactionRequest.nonce) : undefined,
