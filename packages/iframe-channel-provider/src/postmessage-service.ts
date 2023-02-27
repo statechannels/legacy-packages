@@ -40,6 +40,10 @@ export class PostMessageService {
     this.attempts += 1;
 
     logger.info({message}, 'Sending message (attempt %s)', this.attempts);
+    // TODO: This lets us get around CORS restrictions when using different ports on localhost
+    if (corsUrl.startsWith('http://localhost')) {
+      corsUrl = '*';
+    }
     target.postMessage(message, corsUrl);
     logger.info({message}, 'Sent message:');
 
