@@ -25,8 +25,8 @@ export const EnableEthereum = (props: Props) => {
   const targetNetwork = Number(CHAIN_NETWORK_ID);
 
   const window = useContext(WindowContext);
-  const networkVersion = window?.ethereum?.networkVersion;
-  const currentNetwork = networkVersion && Number(networkVersion);
+  const chainId = window?.ethereum?.chainId;
+  const currentNetwork = chainId && Number(chainId);
 
   const metaMaskButton = (disabled, message) => (
     <MetaMaskButton.Outline
@@ -125,7 +125,6 @@ export const EnableEthereum = (props: Props) => {
         return '';
     }
   };
-
   const connectionBanner = (
     <ConnectionBanner currentNetwork={currentNetwork} requiredNetwork={targetNetwork}>
       {{
