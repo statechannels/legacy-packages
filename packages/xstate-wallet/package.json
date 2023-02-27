@@ -1,7 +1,7 @@
 {
   "name": "@statechannels/xstate-wallet",
   "description": "State channel wallet using xstate.",
-  "version": "0.3.0",
+  "version": "0.3.0-hyperspace",
   "author": "Alex Gap",
   "babel": {
     "presets": [

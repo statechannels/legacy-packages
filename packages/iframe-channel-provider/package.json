@@ -1,6 +1,6 @@
 {
   "name": "@statechannels/iframe-channel-provider",
-  "version": "0.3.0",
+  "version": "0.3.0-hyperspace",
   "browser": "dist/iframe-channel-provider.js",
   "browserslist": {
     "production": [

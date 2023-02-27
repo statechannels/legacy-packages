@@ -1,7 +1,7 @@
 {
   "name": "@statechannels/channel-client",
   "description": "Browser-compatible JS client implementing the State Channels Client API",
-  "version": "0.3.0",
+  "version": "0.3.0-hyperspace",
   "author": "snario <liam@l4v.io>",
   "dependencies": {
     "@statechannels/client-api-schema": "0.3.0",
