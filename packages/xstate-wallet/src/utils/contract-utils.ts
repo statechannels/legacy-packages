@@ -1,7 +1,7 @@
 import {Contract} from 'ethers';
 import {ContractArtifacts} from '@statechannels/nitro-protocol';
 
-import {ETH_ASSET_HOLDER_ADDRESS, INFURA_API_KEY, TARGET_NETWORK} from '../config';
+import {ETH_ASSET_HOLDER_ADDRESS, INFURA_API_KEY, RPC_ENDPOINT, TARGET_NETWORK} from '../config';
 import {providers} from 'ethers';
 
 let provider: providers.Web3Provider | providers.JsonRpcProvider;
@@ -11,7 +11,12 @@ export function getProvider(): providers.Web3Provider | providers.JsonRpcProvide
 
   if (window.ethereum) {
     if (window.ethereum.mockingInfuraProvider) {
-      provider = new providers.InfuraProvider(TARGET_NETWORK, INFURA_API_KEY);
+        if (TARGET_NETWORK=='hyperspace'){
+             provider = new providers.JsonRpcProvider(RPC_ENDPOINT);
+        }else{
+             provider = new providers.InfuraProvider(TARGET_NETWORK, INFURA_API_KEY);
+        }
+     
     } else {
       // https://github.com/ethers-io/ethers.js/issues/861#issuecomment-638031278
       provider = new providers.Web3Provider(window.ethereum, 'any');

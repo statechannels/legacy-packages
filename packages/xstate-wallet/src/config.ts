@@ -1,5 +1,5 @@
-import {AddressZero} from '@ethersproject/constants';
-import {Destination} from '@statechannels/wallet-core';
+import { AddressZero } from '@ethersproject/constants';
+import { Destination } from '@statechannels/wallet-core';
 
 // TODO: Use getEnvBool from devtools once working
 function getBool(val: string | undefined): boolean {
@@ -71,3 +71,5 @@ export const HUB = {
 export const TARGET_NETWORK = process.env.TARGET_NETWORK || 'development';
 export const FAUCET_LINK =
   TARGET_NETWORK === 'goerli' ? 'https://goerli-faucet.slock.it/' : 'https://faucet.ropsten.be/';
+
+export const RPC_ENDPOINT = process.env.RPC_ENDPOINT;
