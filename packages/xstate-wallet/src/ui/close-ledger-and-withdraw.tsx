@@ -75,25 +75,29 @@ export const CloseLedgerAndWithdraw = (props: Props) => {
     </Flex>
   );
 
-  const withdrawWaitMining = ({transactionId}: {transactionId: string}) => (
-    <Flex alignItems="center" flexDirection="column">
+  const withdrawWaitMining = ({transactionId}: {transactionId: string}) => {
+  const viewTxUrl =  TARGET_NETWORK === 'hyperspace' ? 
+  `https://explorer.glif.io/tx/${transactionId}/?network=hyperspace` :
+  `https://${TARGET_NETWORK}.etherscan.io/tx/${transactionId}`;
+
+    return <Flex alignItems="center" flexDirection="column">
       <Heading>Withdraw funds</Heading>
 
       <Text pb={2}>Waiting for your transaction to be mined.</Text>
 
       <Text id="wait-for-transaction">
         Click{' '}
-        <Link target="_blank" href={`https://${TARGET_NETWORK}.etherscan.io/tx/${transactionId}`}>
+        <Link target="_blank" href={viewTxUrl}>
           here
         </Link>{' '}
-        to follow the progress on etherscan.
+        to follow the progress.
       </Text>
       <Text>
         <br></br>
         <Loader color="#2728e2" size="60px" />
       </Text>
     </Flex>
-  );
+  };
 
   if (current.matches('waitForUserApproval')) {
     const {budget} = current.context;

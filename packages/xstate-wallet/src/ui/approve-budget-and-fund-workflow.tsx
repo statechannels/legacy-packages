@@ -127,6 +127,10 @@ export const ApproveBudgetAndFund = (props: Props) => {
     </Flex>
   );
 
+  const assetHolderUrl =
+    TARGET_NETWORK === 'hyperspace'
+      ? `https://explorer.glif.io/address/${ETH_ASSET_HOLDER_ADDRESS}/?network=hyperspace`
+      : `https://${TARGET_NETWORK}.etherscan.io/address/${ETH_ASSET_HOLDER_ADDRESS}`;
   const depositWaitTurn = (
     <Flex alignItems="center" flexDirection="column">
       <Heading>Deposit funds</Heading>
@@ -135,13 +139,10 @@ export const ApproveBudgetAndFund = (props: Props) => {
 
       <Text id="wait-for-transaction">
         Click{' '}
-        <Link
-          target="_blank"
-          href={`https://${TARGET_NETWORK}.etherscan.io/address/${ETH_ASSET_HOLDER_ADDRESS}`}
-        >
+        <Link target="_blank" href={assetHolderUrl}>
           here
         </Link>{' '}
-        to follow the progress on etherscan.
+        to follow the progress.
       </Text>
       <Text>
         <br></br>
@@ -160,25 +161,30 @@ export const ApproveBudgetAndFund = (props: Props) => {
     </Flex>
   );
 
-  const depositWaitMining = ({transactionId}: {transactionId: string}) => (
-    <Flex alignItems="center" flexDirection="column">
+  const depositWaitMining = ({transactionId}: {transactionId: string}) => {
+      const viewTxUrl =
+        TARGET_NETWORK === 'hyperspace'
+          ? `https://explorer.glif.io/tx/${transactionId}/?network=hyperspace`
+          : `https://${TARGET_NETWORK}.etherscan.io/tx/${transactionId}`;
+
+   return  <Flex alignItems="center" flexDirection="column">
       <Heading>Deposit funds</Heading>
 
       <Text pb={2}>Waiting for your transaction to be mined.</Text>
 
       <Text id="wait-for-transaction">
         Click{' '}
-        <Link target="_blank" href={`https://${TARGET_NETWORK}.etherscan.io/tx/${transactionId}`}>
+        <Link target="_blank" href={viewTxUrl}>
           here
         </Link>{' '}
-        to follow the progress on etherscan.
+        to follow the progress.
       </Text>
       <Text>
         <br></br>
         <Loader color="#2728e2" size="60px" />
       </Text>
     </Flex>
-  );
+  };
 
   const depositRetry = () => (
     <Flex alignItems="left" justifyContent="space-between" flexDirection="column">
@@ -214,7 +220,7 @@ export const ApproveBudgetAndFund = (props: Props) => {
         You can click{' '}
         <Link
           target="_blank"
-          href={`https://${TARGET_NETWORK}.etherscan.io/address/${ETH_ASSET_HOLDER_ADDRESS}`}
+          href={assetHolderUrl}
         >
           here
         </Link>{' '}
