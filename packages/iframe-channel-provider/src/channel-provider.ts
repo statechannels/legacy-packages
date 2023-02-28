@@ -189,6 +189,7 @@ export class IFrameChannelProvider implements IFrameChannelProviderInterface {
 
   protected async onMessage(event: MessageEvent) {
     let message;
+    if (event.data == '') return;
     if (isJsonRpcNotification(event.data)) {
       message = parseNotification(event.data); // Narrows type, throws if it does not fit the schema
       const notificationMethod = message.method;
