@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { interpret } from 'xstate';
 
 import React from 'react';
-import { DomainBudget, Participant, TFILBudget, BN, Zero } from '@statechannels/wallet-core';
+import { DomainBudget, Participant, ethBudget, BN, Zero } from '@statechannels/wallet-core';
 import { parseEther } from '@ethersproject/units';
 
 import { logger } from '../../logger';
@@ -18,7 +18,7 @@ const store = new Store();
 store.initialize(['0x8624ebe7364bb776f891ca339f0aaa820cc64cc9fca6a28eec71e6d8fc950f29']);
 const messagingService: MessagingServiceInterface = new MessagingService(store);
 
-const budget: DomainBudget = TFILBudget('web3torrent.statechannels.org', {
+const budget: DomainBudget = ethBudget('web3torrent.statechannels.org', {
   availableReceiveCapacity: BN.from(parseEther('0.05')),
   availableSendCapacity: BN.from(parseEther('0.05'))
 });
