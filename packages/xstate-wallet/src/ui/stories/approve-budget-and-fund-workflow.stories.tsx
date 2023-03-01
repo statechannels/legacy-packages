@@ -1,17 +1,17 @@
-export default {title: 'X-state wallet'};
-import {storiesOf} from '@storybook/react';
-import {interpret} from 'xstate';
+export default { title: 'X-state wallet' };
+import { storiesOf } from '@storybook/react';
+import { interpret } from 'xstate';
 
 import React from 'react';
-import {DomainBudget, Participant, ethBudget, BN, Zero} from '@statechannels/wallet-core';
-import {parseEther} from '@ethersproject/units';
+import { DomainBudget, Participant, ethBudget, BN, Zero } from '@statechannels/wallet-core';
+import { parseEther } from '@ethersproject/units';
 
-import {logger} from '../../logger';
-import {Store} from '../../store';
-import {MessagingServiceInterface, MessagingService} from '../../messaging';
-import {ApproveBudgetAndFund} from '../approve-budget-and-fund-workflow';
-import {renderComponentInFrontOfApp} from './helpers';
-import {machine as approveBudgetAndFundWorkflow} from '../../workflows/approve-budget-and-fund';
+import { logger } from '../../logger';
+import { Store } from '../../store';
+import { MessagingServiceInterface, MessagingService } from '../../messaging';
+import { ApproveBudgetAndFund } from '../approve-budget-and-fund-workflow';
+import { renderComponentInFrontOfApp } from './helpers';
+import { machine as approveBudgetAndFundWorkflow } from '../../workflows/approve-budget-and-fund';
 
 const store = new Store();
 
@@ -37,7 +37,7 @@ const hub: Participant = {
 
 const addStory = (name, value, context) => {
   const workflow = approveBudgetAndFundWorkflow(store, messagingService, context);
-  const service = interpret(workflow, {devTools: true}); // start a new interpreted machine for each story
+  const service = interpret(workflow, { devTools: true }); // start a new interpreted machine for each story
   service.onEvent(event => logger.info(event.type)).start(value);
   storiesOf('Workflows / Approve Budget And Fund', module).add(
     name,
@@ -52,7 +52,7 @@ const testContext = {
   player: alice,
   hub
 };
-const contextWithLedger = {...testContext, ledgerId: 'ledger123', ledgerState: {}};
+const contextWithLedger = { ...testContext, ledgerId: 'ledger123', ledgerState: {} };
 const contextWithDeposit = {
   ...contextWithLedger,
   depositAt: BN.from(5),
@@ -66,17 +66,17 @@ const contextWaitTurn = {
   lastChangeBlockNum: 9792500,
   currentBlockNum: 9792500
 };
-const contextSubmitTransaction = {...contextWaitTurn, ledgerTotal: BN.from(5)};
-const contextWaitMining = {...contextSubmitTransaction, transactionId: 'transaction-123'};
-const contextWaitFullyFunded = {...contextWaitTurn, ledgerTotal: BN.from(10)};
+const contextSubmitTransaction = { ...contextWaitTurn, ledgerTotal: BN.from(5) };
+const contextWaitMining = { ...contextSubmitTransaction, transactionId: 'transaction-123' };
+const contextWaitFullyFunded = { ...contextWaitTurn, ledgerTotal: BN.from(10) };
 
 addStory('waitForUserApproval', 'waitForUserApproval', testContext);
 addStory('createLedger', 'createLedger', testContext);
 addStory('createBudget', 'createBudget', testContext);
 addStory('waitForPreFS', 'waitForPreFS', contextWithLedger);
-addStory('deposit.init', {deposit: 'init'}, contextWithDeposit);
-addStory('deposit.waitTurn', {deposit: 'waitTurn'}, contextWaitTurn);
-addStory('deposit.submitTransaction', {deposit: 'submitTransaction'}, contextSubmitTransaction);
-addStory('deposit.retry', {deposit: 'retry'}, contextSubmitTransaction);
-addStory('deposit.waitMining', {deposit: 'waitMining'}, contextWaitMining);
-addStory('deposit.waitFullyFunded', {deposit: 'waitFullyFunded'}, contextWaitFullyFunded);
+addStory('deposit.init', { deposit: 'init' }, contextWithDeposit);
+addStory('deposit.waitTurn', { deposit: 'waitTurn' }, contextWaitTurn);
+addStory('deposit.submitTransaction', { deposit: 'submitTransaction' }, contextSubmitTransaction);
+addStory('deposit.retry', { deposit: 'retry' }, contextSubmitTransaction);
+addStory('deposit.waitMining', { deposit: 'waitMining' }, contextWaitMining);
+addStory('deposit.waitFullyFunded', { deposit: 'waitFullyFunded' }, contextWaitFullyFunded);

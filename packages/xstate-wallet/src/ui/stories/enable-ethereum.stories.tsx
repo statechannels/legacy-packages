@@ -1,15 +1,15 @@
-export default {title: 'X-state wallet'};
-import {storiesOf} from '@storybook/react';
-import {interpret} from 'xstate';
+export default { title: 'X-state wallet' };
+import { storiesOf } from '@storybook/react';
+import { interpret } from 'xstate';
 import React from 'react';
-import {renderComponentInFrontOfApp} from './helpers';
+import { renderComponentInFrontOfApp } from './helpers';
 
-import {MessagingServiceInterface, MessagingService} from '../../messaging';
-import {ethereumEnableWorkflow} from '../../workflows/ethereum-enable';
-import {EnableEthereum} from '../enable-ethereum-workflow';
-import {Store} from '../../store';
-import {WindowContext} from '../window-context';
-import {logger} from '../../logger';
+import { MessagingServiceInterface, MessagingService } from '../../messaging';
+import { ethereumEnableWorkflow } from '../../workflows/ethereum-enable';
+import { EnableEthereum } from '../enable-ethereum-workflow';
+import { Store } from '../../store';
+import { WindowContext } from '../window-context';
+import { logger } from '../../logger';
 
 const store = new Store();
 store.initialize(['0x8624ebe7364bb776f891ca339f0aaa820cc64cc9fca6a28eec71e6d8fc950f29']);
@@ -19,9 +19,9 @@ const testContext = {
   requestId: 55
 };
 
-const windowMetamaskOk = {ethereum: {networkVersion: process.env.CHAIN_NETWORK_ID}};
+const windowMetamaskOk = { ethereum: { networkVersion: process.env.CHAIN_NETWORK_ID } };
 const windowNoMetamask = {};
-const windowWrongNetwork = {ethereum: {networkVersion: 3}};
+const windowWrongNetwork = { ethereum: { networkVersion: 3 } };
 
 const storyOf = (state, window: any = windowMetamaskOk, name: any = undefined) => {
   name = name || state.toString();
