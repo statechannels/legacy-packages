@@ -1,15 +1,15 @@
-export default {title: 'X-state wallet'};
-import {storiesOf} from '@storybook/react';
-import {interpret} from 'xstate';
+export default { title: 'X-state wallet' };
+import { storiesOf } from '@storybook/react';
+import { interpret } from 'xstate';
 import React from 'react';
-import {Participant, DomainBudget, ethBudget, BN} from '@statechannels/wallet-core';
-import {parseEther} from '@ethersproject/units';
+import { Participant, DomainBudget, TFILBudget, BN } from '@statechannels/wallet-core';
+import { parseEther } from '@ethersproject/units';
 
-import {MessagingService, MessagingServiceInterface} from '../../messaging';
-import {CloseLedgerAndWithdraw} from '../close-ledger-and-withdraw';
-import {Store} from '../../store';
-import {renderComponentInFrontOfApp} from './helpers';
-import {logger} from '../../logger';
+import { MessagingService, MessagingServiceInterface } from '../../messaging';
+import { CloseLedgerAndWithdraw } from '../close-ledger-and-withdraw';
+import { Store } from '../../store';
+import { renderComponentInFrontOfApp } from './helpers';
+import { logger } from '../../logger';
 import {
   workflow as closeLedgerWithdrawWorkflow,
   config,
@@ -32,7 +32,7 @@ const bob: Participant = {
   destination: '0xbd' as any
 };
 
-const budget: DomainBudget = ethBudget('rps.statechannels.org', {
+const budget: DomainBudget = TFILBudget('rps.statechannels.org', {
   availableReceiveCapacity: BN.from(parseEther('0.05')),
   availableSendCapacity: BN.from(parseEther('0.05'))
 });
