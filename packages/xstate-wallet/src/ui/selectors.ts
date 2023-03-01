@@ -1,8 +1,8 @@
-import {DomainBudget, unreachable, Uint256} from '@statechannels/wallet-core';
-import {Interpreter} from 'xstate';
+import { DomainBudget, unreachable, Uint256 } from '@statechannels/wallet-core';
+import { Interpreter } from 'xstate';
 
-import {ETH_ASSET_HOLDER_ADDRESS} from '../config';
-import {WorkflowState as CCCWorkflowState} from '../workflows/confirm';
+import { ETH_ASSET_HOLDER_ADDRESS } from '../config';
+import { WorkflowState as CCCWorkflowState } from '../workflows/confirm';
 import {
   WorkflowState as AppWorkflowState,
   StateValue as AppStateValue
@@ -82,9 +82,9 @@ export function getApplicationOpenProgress(applicationWorkflowState: AppWorkflow
 
 export function getAmountsFromBudget(
   budget: DomainBudget
-): {playerAmount: Uint256; hubAmount: Uint256} {
+): { playerAmount: Uint256; hubAmount: Uint256 } {
   const pending = budget.forAsset[ETH_ASSET_HOLDER_ADDRESS];
-  if (!pending) throw new Error('No eth budget found');
-  const {availableReceiveCapacity, availableSendCapacity} = pending;
-  return {playerAmount: availableSendCapacity, hubAmount: availableReceiveCapacity};
+  if (!pending) throw new Error('No TFILbudget found');
+  const { availableReceiveCapacity, availableSendCapacity } = pending;
+  return { playerAmount: availableSendCapacity, hubAmount: availableReceiveCapacity };
 }
