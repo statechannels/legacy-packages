@@ -223,7 +223,7 @@ export const ApproveBudgetAndFund = (props: Props) => {
         <Link target="_blank" href={assetHolderUrl}>
           here
         </Link>{' '}
-        to see the progress on TFILerscan or you can download your log files and reach out to us on{' '}
+        to see the progress on the GLIF explorer or you can download your log files and reach out to us on{' '}
         <Link target="_blank" href={'https://github.com/statechannels/monorepo/issues'}>
           {' '}
           github.

@@ -26,13 +26,13 @@ const windowWrongNetwork = { ethereum: { networkVersion: 3 } };
 const storyOf = (state, window: any = windowMetamaskOk, name: any = undefined) => {
   name = name || state.toString();
   const machine = interpret<any, any, any>(
-    TFILereumEnableWorkflow(store, messagingService, testContext).withContext(testContext),
+    ethereumEnableWorkflow(store, messagingService, testContext).withContext(testContext),
     {
       devTools: true
     }
   ); // start a new interpreted machine for each story
   machine.onEvent(event => logger.info(event.type)).start(state);
-  storiesOf('Workflows / Enable TFILereum', module).add(
+  storiesOf('Workflows / Enable Ethereum', module).add(
     name,
     renderComponentInFrontOfApp(
       <WindowContext.Provider value={window}>
